@@ -59,4 +59,4 @@ history = model.fit(
 
 # ---- Save model ----
 model.save('v2_model.hdf5')
-print("Model saved as v1_model.hdf5")
+print("Model saved as v2_model.hdf5")

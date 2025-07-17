@@ -1,0 +1,12 @@
+#put all libraries here
+tensorflow>=2.9.0
+numpy
+Pillow
+opencv-python
+streamlit
+matplotlib
+
+
+
+#run using this command
+# pip install -r requirements.txt

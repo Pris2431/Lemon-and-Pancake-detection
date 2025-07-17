@@ -1,8 +1,8 @@
 
-pancake - v1 2022-12-28 5:37pm
+pancake - v2 pancake final
 ==============================
 
-This dataset was exported via roboflow.com on July 1, 2025 at 7:32 AM GMT
+This dataset was exported via roboflow.com on July 17, 2025 at 9:17 AM GMT
 
 Roboflow is an end-to-end computer vision platform that helps you
 * collaborate with your team on computer vision projects
@@ -17,13 +17,18 @@ visit https://github.com/roboflow/notebooks
 
 To find over 100k other datasets and pre-trained models, visit https://universe.roboflow.com
 
-The dataset includes 362 images.
-Pancake are annotated in YOLO v4 PyTorch format.
+The dataset includes 2357 images.
+Pancake are annotated in folder format.
 
 The following pre-processing was applied to each image:
 * Auto-orientation of pixel data (with EXIF-orientation stripping)
 * Resize to 640x640 (Stretch)
 
-No image augmentation techniques were applied.
+The following augmentation was applied to create 3 versions of each source image:
+* 50% probability of horizontal flip
+* Randomly crop between 0 and 20 percent of the image
+* Random brigthness adjustment of between -15 and +15 percent
+* Random exposure adjustment of between -10 and +10 percent
+* Salt and pepper noise was applied to 0.5 percent of pixels
 
 

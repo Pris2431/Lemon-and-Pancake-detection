@@ -2,6 +2,7 @@ from PIL import Image, ImageOps
 import tensorflow as tf
 import numpy as np
 import cv2
+import os
 
 # ---- Load model ----
 model = tf.keras.models.load_model('v2_model.hdf5')
