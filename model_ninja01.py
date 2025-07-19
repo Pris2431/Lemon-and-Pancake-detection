@@ -119,8 +119,13 @@ def cnn_architecture(input_shape=(224, 224, 3)):
 
     return Model(inputs, outputs)
 
+<<<<<<< HEAD
 train_dir = 'C:\Python\group 5 mlai pancakes\train'
 test_dir = 'C:\Python\group 5 mlai pancakes\test'
+=======
+train_dir = 'C:/Python/rps/datasets/train/'
+test_dir = 'C:/Python/rps/datasets/test/'
+>>>>>>> 2dde8a9 (Initial commit for Htoo branch)
 
 # Load data with 15% validation split
 train_generator, validation_generator = image_gen_w_aug(train_dir)
@@ -170,4 +175,8 @@ plt.show()
 
 # Save model
 model_TL.summary()
+<<<<<<< HEAD
 model_TL.save('model_pluto.keras')
+=======
+model_TL.save('model_pluto.keras')
+>>>>>>> 2dde8a9 (Initial commit for Htoo branch)
