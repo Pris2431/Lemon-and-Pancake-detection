@@ -5,7 +5,7 @@ from PIL import Image, ImageOps
 
 # Function to preprocess and predict
 def import_and_predict(image_data, model):
-    size = (224, 224)
+    size = (128, 128)
     image = ImageOps.fit(image_data, size, Image.Resampling.LANCZOS)
     image = image.convert('RGB')
     image = np.asarray(image)
@@ -36,7 +36,7 @@ else:
     confidence = np.max(prediction)
     predicted_index = np.argmax(prediction)
 
-    if confidence < 0.6:
+    if confidence < 0.4:
         result = "It is unknown."
     else:
         result = f"It is a {class_names[predicted_index]} ✅"

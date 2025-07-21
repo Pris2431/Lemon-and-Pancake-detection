@@ -24,7 +24,7 @@ def image_gen_w_aug(train_parent_directory):
 
     train_generator = train_datagen.flow_from_directory(
         train_parent_directory,
-        target_size=(224, 224),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical',
         subset='training',
@@ -33,7 +33,7 @@ def image_gen_w_aug(train_parent_directory):
 
     val_generator = train_datagen.flow_from_directory(
         train_parent_directory,
-        target_size=(224, 224),
+        target_size=(128, 128),
         batch_size=32,
         class_mode='categorical',
         subset='validation',
@@ -43,79 +43,38 @@ def image_gen_w_aug(train_parent_directory):
     return train_generator, val_generator
 
 
-def cnn_architecture(input_shape=(224, 224, 3)):
+def cnn_architecture(input_shape=(128, 128, 3)):
     inputs = Input(shape=input_shape)
 
-    # Stem
-    x = Conv2D(32, 3, strides=2, padding='same', use_bias=False)(inputs)
+    # Block 1
+    x = Conv2D(32, (3,3), padding='same', activation='relu')(inputs)
     x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
+    x = Conv2D(32, (3,3), padding='same', activation='relu')(x)
+    x = BatchNormalization()(x)
+    x = tf.keras.layers.MaxPooling2D()(x)
+    x = Dropout(0.25)(x)
 
-    # Bottleneck 1
-    x = Conv2D(192, 1, use_bias=False)(x)
+    # Block 2
+    x = Conv2D(64, (3,3), padding='same', activation='relu')(x)
     x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = DepthwiseConv2D(3, strides=1, padding='same', use_bias=False)(x)
+    x = Conv2D(64, (3,3), padding='same', activation='relu')(x)
     x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = Conv2D(16, 1, use_bias=False)(x)
-    x = BatchNormalization()(x)
+    x = tf.keras.layers.MaxPooling2D()(x)
+    x = Dropout(0.25)(x)
 
-    # Bottleneck 2
-    x = Conv2D(96, 1, use_bias=False)(x)
+    # Block 3
+    x = Conv2D(128, (3,3), padding='same', activation='relu')(x)
     x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = DepthwiseConv2D(3, strides=2, padding='same', use_bias=False)(x)
+    x = Conv2D(128, (3,3), padding='same', activation='relu')(x)
     x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = Conv2D(32, 1, use_bias=False)(x)
-    x = BatchNormalization()(x)
-
-    # Bottleneck 3 with residual
-    res = x
-    x = Conv2D(192, 1, use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = DepthwiseConv2D(3, strides=1, padding='same', use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = Conv2D(32, 1, use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = Add()([res, x])
-
-    # Bottleneck 4
-    x = Conv2D(64, 1, use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = DepthwiseConv2D(3, strides=2, padding='same', use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = Conv2D(64, 1, use_bias=False)(x)
-    x = BatchNormalization()(x)
-
-    # Bottleneck 5 with residual
-    res = x
-    x = Conv2D(64, 1, use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = DepthwiseConv2D(3, strides=1, padding='same', use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
-    x = Conv2D(64, 1, use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = Add()([res, x])
-
-    # Final Convolution
-    x = Conv2D(128, 1, use_bias=False)(x)
-    x = BatchNormalization()(x)
-    x = ReLU(6.)(x)
+    x = tf.keras.layers.MaxPooling2D()(x)
+    x = Dropout(0.3)(x)
 
     # Head
     x = GlobalAveragePooling2D()(x)
-    x = Dropout(0.3)(x)
     x = Dense(128, activation='relu')(x)
-    x = Dropout(0.3)(x)
-    outputs = Dense(3, activation='softmax')(x)
+    x = Dropout(0.4)(x)
+    outputs = Dense(num_classes, activation='softmax')(x)
 
     return Model(inputs, outputs)
 
@@ -136,7 +95,7 @@ print("Class indices (label mapping):", train_generator.class_indices)
 test_datagen = ImageDataGenerator(rescale=1./255)
 test_generator = test_datagen.flow_from_directory(
     test_dir,
-    target_size=(224, 224),
+    target_size=(128, 128),
     batch_size=32,
     class_mode='categorical',
     shuffle=False

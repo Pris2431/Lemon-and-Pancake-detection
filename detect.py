@@ -12,7 +12,7 @@ print("Model loaded!")
 class_names = ['lemon', 'pancake', 'unknown']
 
 def import_and_predict(image_data, model):
-    size = (224, 224)
+    size = (128, 128)
     image = ImageOps.fit(image_data, size, Image.Resampling.LANCZOS)
     image = image.convert('RGB')
     image = np.asarray(image)
@@ -37,7 +37,7 @@ while True:
     # Optional: Improve lighting
     original = cv2.convertScaleAbs(original, alpha=1.3, beta=40)
 
-    frame = cv2.resize(original, (224, 224))
+    frame = cv2.resize(original, (128, 128))
     image = Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
     prediction = import_and_predict(image, model)
